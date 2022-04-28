@@ -1,0 +1,50 @@
+dependent_variables:
+- header: {name: RAA}
+  qualifiers:
+  - {name: RE, value: PB PB --> LAMBDAc+ --> P+ +K- + PI+}
+  - {name: SQRT(S), units: GEV, value: 5020}
+  - {name: $|$RAPIDITY(LAMBDAc+)$|$, value: $<$ 1.0}
+  - {name: CENTRALITY, units: $\%$, value: 0.0-100.0}
+  - {name: PP UNCERTAINTY (STAT and SYS), units: $\%$, value: -30 +35}
+  - {name: PBPB GLOBAL UNCERTAINTY, units: $\%$, value: 21}
+  values:
+  - value: 0.270
+    errors:
+    - asymerror: {minus: -0.046, plus: 0.049}
+      label: stat
+    - asymerror: {minus: -0.071, plus: 0.071}
+      label: sys
+- header: {name: RAA}
+  qualifiers:
+  - {name: RE, value: PB PB --> LAMBDAc+ --> P+ +K- + PI+}
+  - {name: SQRT(S), units: GEV, value: 5020}
+  - {name: $|$RAPIDITY(LAMBDAc+)$|$, value: $<$ 1.0}
+  - {name: CENTRALITY, units: $\%$, value: 0.0-30.0}
+  - {name: PP UNCERTAINTY (STAT and SYS), units: $\%$, value: -30 +35}
+  - {name: PBPB GLOBAL UNCERTAINTY, units: $\%$, value: 21}
+  values:
+  - value: 0.188
+    errors:
+    - asymerror: {minus: -0.044, plus: 0.050}
+      label: stat
+    - asymerror: {minus: -0.049, plus: 0.049}
+      label: sys
+- header: {name: RAA}
+  qualifiers:
+  - {name: RE, value: PB PB --> LAMBDAc+ --> P+ +K- + PI+}
+  - {name: SQRT(S), units: GEV, value: 5020}
+  - {name: $|$RAPIDITY(LAMBDAc+)$|$, value: $<$ 1.0}
+  - {name: CENTRALITY, units: $\%$, value: 30.0-100.0}
+  - {name: PP UNCERTAINTY (STAT and SYS), units: $\%$, value: -30 +35}
+  - {name: PBPB GLOBAL UNCERTAINTY, units: $\%$, value: 21}
+  values:
+  - value: 0.484
+    errors: 
+    - asymerror: {minus: -0.061, plus: 0.065}
+      label: stat
+    - asymerror: {minus: -0.129, plus: 0.131}
+      label: sys
+independent_variables:
+- header: {name: PT, units: GEV}
+  values:
+  - {high: 20.0, low: 10.0}

@@ -1,0 +1,90 @@
+independent_variables:
+- header: {name: Jet $p_T$, units: GEV}
+  values:
+  - {low: 55, high: 80}
+  - {low: 80, high: 120}
+  - {low: 120, high: 170}
+  - {low: 170, high: 250}
+  - {low: 250, high: 400}
+dependent_variables:
+- header: {name: 1/A d$\sigma$/dp$_T$, units: nb/GEV}
+  qualifiers:
+  - {name: RE, value: p PB --> c X}
+  - {name: SQRT(s), value: 5020.0, units: GEV}
+  - {name: Jet $|\eta(cm)|$, value: < 1.5} 
+  - {name: anti-k$_T$ R, value: 0.3}
+  values:
+  - value: 4.38
+    errors: 
+    - {symerror: 0.56, label: stat}
+    - {symerror: 0.81, label: sys}
+  - value: 0.58
+    errors: 
+    - {symerror: 0.05, label: stat}
+    - {symerror: 0.10, label: sys}
+  - value: 0.076
+    errors: 
+    - {symerror: 0.008, label: stat}
+    - {symerror: 0.014, label: sys}
+  - value: 0.011
+    errors: 
+    - {symerror: 0.0015, label: stat}
+    - {symerror: 0.0023, label: sys}
+  - value: 0.00097
+    errors: 
+    - {symerror: 0.00018, label: stat}
+    - {symerror: 0.00030, label: sys}
+- header: {name: d$\sigma$/dp$_T$, units: nb/GEV}
+  qualifiers:
+  - {name: RE, value: p p --> c X}
+  - {name: SQRT(s), value: 5020.0, units: GEV}
+  - {name: Jet $|\eta(cm)|$, value: < 1.5} 
+  - {name: anti-k$_T$ R, value: 0.3}
+  values:
+  - value: 4.4
+    errors: 
+    - {symerror: 0.66, label: stat}
+    - {symerror: 0.70, label: sys}
+  - value: 0.64
+    errors: 
+    - {symerror: 0.06, label: stat}
+    - {symerror: 0.11, label: sys}
+  - value: 0.097
+    errors: 
+    - {symerror: 0.015, label: stat}
+    - {symerror: 0.017, label: sys}
+  - value: 0.011
+    errors: 
+    - {symerror: 0.0018, label: stat}
+    - {symerror: 0.0023, label: sys}
+  - value: 0.00077
+    errors: 
+    - {symerror: 0.00012, label: stat}
+    - {symerror: 0.00021, label: sys}
+- header: {name: RpA}
+  qualifiers:
+  - {name: RE, value: p p/PB --> c X}
+  - {name: SQRT(s), units: GEV, value: 5020.0}
+  - {name: Jet $|\eta(cm)|$, value: < 1.5} 
+  - {name: anti-k$_T$ R, value: 0.3}
+  values:
+  - value: 1.0
+    errors: 
+    - {symerror: 0.20, label: stat}
+    - {symerror: 0.21, label: sys}
+  - value: 0.90
+    errors: 
+    - {symerror: 0.11, label: stat}
+    - {symerror: 0.21, label: sys}
+  - value: 0.79
+    errors: 
+    - {symerror: 0.15, label: stat}
+    - {symerror: 0.19, label: sys}
+  - value: 1.04
+    errors: 
+    - {symerror: 0.22, label: stat}
+    - {symerror: 0.31, label: sys}
+  - value: 1.25
+    errors: 
+    - {symerror: 0.30, label: stat}
+    - {symerror: 0.52, label: sys}

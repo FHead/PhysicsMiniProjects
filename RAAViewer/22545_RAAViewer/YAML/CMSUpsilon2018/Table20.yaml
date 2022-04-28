@@ -1,0 +1,88 @@
+dependent_variables:
+- header: {name: RAA}
+  qualifiers:
+  - {name: ABS(YRAP), value: 0.0-2.4}
+  - {name: PT, units: GEV, value: 0.0-30.0}
+  - {name: RE, value: P P --> Upsilon(2S) < MU+ MU- > X}
+  - {name: RE, value: PB PB --> Upsilon(2S) < MU+ MU- > X}
+  - {name: SQRT(S)/NUCLEON, units: GeV, value: '5020.0'}
+  - {name: GLOBAL UNCERTAINTY, value: 3.05 %}
+  - {name: PP Y(2S) GLOBAL UNCERTAINTY, value: 4.76 %}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.319}
+    - {label: sys, asymerror: {plus: 0.154, minus: -0.136}}
+    value: 0.563
+  - errors:
+    - {label: stat, symerror: 0.170}
+    - {label: sys, asymerror: {plus: 0.131, minus: -0.128}}
+    value: 0.530
+  - errors:
+    - {label: stat, symerror: 0.106}
+    - {label: sys, asymerror: {plus: 0.038, minus: -0.037}}
+    value: 0.211
+  - errors:
+    - {label: stat, symerror: 0.077}
+    - {label: sys, asymerror: {plus: 0.023, minus: -0.023}}
+    value: 0.229
+  - errors:
+    - {label: stat, symerror: 0.060}
+    - {label: sys, asymerror: {plus: 0.019, minus: -0.019}}
+    value: 0.194
+  - errors:
+    - {label: stat, symerror: 0.092}
+    - {label: sys, asymerror: {plus: 0.032, minus: -0.032}}
+    value: 0.154
+  - errors:
+    - {label: stat, symerror: 0.042}
+    - {label: sys, asymerror: {plus: 0.031, minus: -0.031}}
+    value: 0.101
+  - errors:
+    - {label: stat, symerror: 0.051}
+    - {label: sys, asymerror: {plus: 0.009, minus: -0.009}}
+    value: 0.119
+- header: {name: <Npart>}
+  qualifiers:
+  - {name: ABS(YRAP), value: 0.0-2.4}
+  - {name: PT, units: GEV, value: 0.0-30.0}
+  - {name: RE, value: P P --> Upsilon(2S) < MU+ MU- > X}
+  - {name: RE, value: PB PB --> Upsilon(2S) < MU+ MU- > X}
+  - {name: SQRT(S)/NUCLEON, units: GeV, value: '5020.0'}
+  - {name: GLOBAL UNCERTAINTY, value:  3.05 %}
+  - {name: PP Y(2S) GLOBAL UNCERTAINTY, value: 4.76 %}
+  values:
+  - errors:
+    - {label: sys, asymerror: {plus: 1.0, minus: -0.6}}
+    value: 8.3
+  - errors:
+    - {label: sys, asymerror: {plus: 2.6, minus: -2.4}}
+    value: 30.6
+  - errors:
+    - {label: sys, asymerror: {plus: 3.2, minus: -3.1}}
+    value: 53.9
+  - errors:
+    - {label: sys, asymerror: {plus: 3.7, minus: -3.7}}
+    value: 87.0
+  - errors:
+    - {label: sys, asymerror: {plus: 4.0, minus: -4.0}}
+    value: 131.4
+  - errors:
+    - {label: sys, asymerror: {plus: 4.0, minus: -4.1}}
+    value: 189.2
+  - errors:
+    - {label: sys, asymerror: {plus: 3.6, minus: -3.8}}
+    value: 264.2
+  - errors:
+    - {label: sys, asymerror: {plus: 3.3, minus: -3.2}}
+    value: 333.3
+independent_variables:
+- header: {name: Centrality, units: PCT}
+  values:
+  - {high: 100.0, low: 70.0}
+  - {high: 70.0, low: 60.0}
+  - {high: 60.0, low: 50.0}
+  - {high: 50.0, low: 40.0}
+  - {high: 40.0, low: 30.0}
+  - {high: 30.0, low: 20.0}
+  - {high: 20.0, low: 10.0}
+  - {high: 10.0, low: 5.0}

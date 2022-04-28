@@ -1,0 +1,147 @@
+independent_variables:
+- header: {name: PT, units: GEV}
+  values:
+  - {low: 2.0, high: 3.0}
+  - {low: 3.0, high: 4.0}
+  - {low: 4.0, high: 5.0}
+  - {low: 5.0, high: 6.0}
+  - {low: 6.0, high: 8.0}
+  - {low: 8.0, high: 10.0}
+  - {low: 10.0, high: 12.5}
+  - {low: 12.5, high: 15.0}
+  - {low: 15.0, high: 20.0}
+  - {low: 20.0, high: 25.0}
+  - {low: 25.0, high: 30.0}
+  - {low: 30.0, high: 40.0}
+  - {low: 40.0, high: 60.0}
+  - {low: 60.0, high: 100.0}
+dependent_variables:
+- header: {name: RAA}
+  qualifiers:
+  - {name: RE, value: PB PB --> D0 --> K + PI}
+  - {name: SQRT(S), units: GEV, value: 5020}
+  - {name: $|$RAPIDITY(D)$|$, value: $<$ 1}
+  - {name: CENTRALITY, units: $\%$, value: 0.0 - 100.0}
+  - {name: GLOBAL UNCERTAINTY (TAA and LUMI), units: $\%$, value: -4.6 +4.1}
+  values:
+  - value: 0.723
+    errors:
+    - {symerror: 0.097, label: stat}
+    - {symerror: 0.137, label: sys}
+  - value: 0.573
+    errors:
+    - {symerror: 0.052, label: stat}
+    - {symerror: 0.105, label: sys}
+  - value: 0.387
+    errors:
+    - {symerror: 0.026, label: stat}
+    - {symerror: 0.066, label: sys}
+  - value: 0.282
+    errors:
+    - {symerror: 0.022, label: stat}
+    - {symerror: 0.048, label: sys}
+  - value: 0.319
+    errors:
+    - {symerror: 0.020, label: stat}
+    - {symerror: 0.054, label: sys}
+  - value: 0.258
+    errors:
+    - {symerror: 0.015, label: stat}
+    - {symerror: 0.043, label: sys}
+  - value: 0.307
+    errors:
+    - {symerror: 0.019, label: stat}
+    - {symerror: 0.051, label: sys}
+  - value: 0.337
+    errors:
+    - {symerror: 0.025, label: stat}
+    - {symerror: 0.056, label: sys}
+  - value: 0.353
+    errors:
+    - {symerror: 0.029, label: stat}
+    - {symerror: 0.064, label: sys}
+  - value: 0.455
+    errors:
+    - {symerror: 0.044, label: stat}
+    - {symerror: 0.081, label: sys}
+  - value: 0.513
+    errors:
+    - {symerror: 0.041, label: stat}
+    - {symerror: 0.096, label: sys}
+  - value: 0.613
+    errors:
+    - {symerror: 0.048, label: stat}
+    - {symerror: 0.110, label: sys}
+  - value: 0.755
+    errors:
+    - {symerror: 0.039, label: stat}
+    - {symerror: 0.131, label: sys}
+  - value: 0.814
+    errors:
+    - {symerror: 0.059, label: stat}
+    - {symerror: 0.149, label: sys}
+- header: {name: RAA}
+  qualifiers:
+  - {name: RE, value: PB PB --> D0 --> K + PI}
+  - {name: SQRT(S), units: GEV, value: 5020}
+  - {name: $|$RAPIDITY(D)$|$, value: $<$ 1}
+  - {name: CENTRALITY, units: $\%$, value: 0.0 - 10.0}
+  - {name: GLOBAL UNCERTAINTY (TAA and LUMI), units: $\%$, value: -4.3 +3.6}
+  values:
+  - value: 0.761
+    errors:
+    - {symerror: 0.161, label: stat}
+    - {symerror: 0.183, label: sys}
+  - value: 0.609
+    errors:
+    - {symerror: 0.092, label: stat}
+    - {symerror: 0.126, label: sys}
+  - value: 0.337
+    errors:
+    - {symerror: 0.035, label: stat}
+    - {symerror: 0.067, label: sys}
+  - value: 0.167
+    errors:
+    - {symerror: 0.020, label: stat}
+    - {symerror: 0.033, label: sys}
+  - value: 0.180
+    errors:
+    - {symerror: 0.018, label: stat}
+    - {symerror: 0.035, label: sys}
+  - value: 0.175
+    errors:
+    - {symerror: 0.014, label: stat}
+    - {symerror: 0.035, label: sys}
+  - value: 0.219
+    errors:
+    - {symerror: 0.020, label: stat}
+    - {symerror: 0.042, label: sys}
+  - value: 0.225
+    errors:
+    - {symerror: 0.024, label: stat}
+    - {symerror: 0.043, label: sys}
+  - value: 0.263
+    errors:
+    - {symerror: 0.031, label: stat}
+    - {symerror: 0.059, label: sys}
+  - value: 0.345
+    errors:
+    - {symerror: 0.052, label: stat}
+    - {symerror: 0.071, label: sys}
+  - value: 0.504
+    errors:
+    - {symerror: 0.061, label: stat}
+    - {symerror: 0.104, label: sys}
+  - value: 0.470
+    errors:
+    - {symerror: 0.054, label: stat}
+    - {symerror: 0.099, label: sys}
+  - value: 0.667
+    errors:
+    - {symerror: 0.049, label: stat}
+    - {symerror: 0.131, label: sys}
+  - value: 0.682
+    errors:
+    - {symerror: 0.079, label: stat}
+    - {symerror: 0.169, label: sys}
+
