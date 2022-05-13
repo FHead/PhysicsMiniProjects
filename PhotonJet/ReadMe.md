@@ -2,7 +2,7 @@
 
 # Code short description
 
-Here is what each code does:
+Here is what each code does.  Each folder performs a different function and is not dependent (code-wise) on others.
 
 ## 24513_UnfoldingPreparation
 
