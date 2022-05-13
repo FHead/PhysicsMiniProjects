@@ -235,8 +235,8 @@ int main(int argc, char *argv[])
          MCCorrection[i], CorrectionFileName, CorrectionState);
    }
    
-   for(TGraphAsymmErrors G : GResult)
-      cout << "Total integral = " << CalculateIntegral(G, WorldXMin) << endl;
+   // for(TGraphAsymmErrors G : GResult)
+   //    cout << "Total integral = " << CalculateIntegral(G, WorldXMin) << endl;
 
    vector<TGraphAsymmErrors> GRResult, GRSystematics;
    vector<vector<TGraphAsymmErrors>> GRMC(MCCount);

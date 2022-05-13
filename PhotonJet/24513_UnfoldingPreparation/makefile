@@ -2,6 +2,9 @@
 
 default: TestRun
 
+RunAll: Execute
+	bash RunAll.sh
+
 TestRun: Execute
 	./Execute --Data unfolding/data/accumulate_aa.root \
 		--DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_1 \

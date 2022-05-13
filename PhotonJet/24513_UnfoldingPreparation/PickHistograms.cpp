@@ -58,26 +58,40 @@ int main(int argc, char *argv[])
    // Copy over data
    TH1D HDataReco("HDataReco", ";;", NReco, 0, NReco);
    for(int i = 1; i <= NReco; i++)
+   {
       HDataReco.SetBinContent(i, HInputData->GetBinContent(i));
+      HDataReco.SetBinError(i, HInputData->GetBinError(i));
+   }
    HDataReco.Write();
    
    // Copy over response
    TH2D HResponse("HResponse", ";;", NReco, 0, NReco, NGen, 0, NGen);
    for(int iX = 1; iX <= NReco; iX++)
+   {
       for(int iY = 1; iY <= NGen; iY++)
+      {
          HResponse.SetBinContent(iX, iY, HInputResponse->GetBinContent(iX, iY));
+         HResponse.SetBinError(iX, iY, HInputResponse->GetBinError(iX, iY));
+      }
+   }
    HResponse.Write();
 
    // Copy over MC truth
    TH1D HMCGen("HMCGen", ";;", NGen, 0, NGen);
    for(int i = 1; i <= NGen; i++)
+   {
       HMCGen.SetBinContent(i, HInputResponseTruth->GetBinContent(i));
+      HMCGen.SetBinError(i, HInputResponseTruth->GetBinError(i));
+   }
    HMCGen.Write();
    
    // Copy over MC measured
    TH1D HMCReco("HMCReco", ";;", NReco, 0, NReco);
    for(int i = 1; i <= NReco; i++)
+   {
       HMCReco.SetBinContent(i, HInputResponseReco->GetBinContent(i));
+      HMCReco.SetBinError(i, HInputResponseReco->GetBinError(i));
+   }
    HMCReco.Write();
 
    // Binning histograms

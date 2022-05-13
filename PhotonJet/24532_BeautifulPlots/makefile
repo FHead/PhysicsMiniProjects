@@ -9,7 +9,10 @@ Deploy:
 	mkdir -p ../FinalResult/UnfoldedPartial
 	cp Plots/*png ../FinalResult/UnfoldedPartial
 
-RunTest: RunTestPP
+RunTest: RunAll
+
+RunAll: Execute
+	bash RunAll.sh
 
 RunTestPP: Execute
 	./Execute --Input Input/PPDPhi.root \
