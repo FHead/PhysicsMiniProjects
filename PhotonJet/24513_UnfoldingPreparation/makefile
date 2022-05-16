@@ -19,4 +19,4 @@ TestRun: Execute
 		--Output Output/AATest.root
 
 Execute: PickHistograms.cpp
-	CompileRootMacro PickHistograms.cpp Execute
+	g++ PickHistograms.cpp `root-config --cflags --glibs` -I. -o Execute
