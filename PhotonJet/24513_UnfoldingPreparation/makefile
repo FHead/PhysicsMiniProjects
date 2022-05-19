@@ -6,6 +6,7 @@ RunAll: Execute
 	bash RunAll.sh
 
 TestRun: Execute
+	mkdir -p Output
 	./Execute --Data unfolding/data/accumulate_aa.root \
 		--DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_1 \
 		--Response unfolding/response_matrices/vacillate_aa_dr.root \
@@ -19,4 +20,4 @@ TestRun: Execute
 		--Output Output/AATest.root
 
 Execute: PickHistograms.cpp
-	CompileRootMacro PickHistograms.cpp Execute
+	g++ PickHistograms.cpp `root-config --cflags --glibs` -I. -o Execute
