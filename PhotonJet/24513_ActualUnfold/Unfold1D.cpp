@@ -184,20 +184,21 @@ int main(int argc, char *argv[])
 
    CommandLine CL(argc, argv);
 
-   string InputFileName    = CL.Get("Input",             "Input/DataJetPNominal.root");
-   string DataName         = CL.Get("InputName",         "HDataReco");
-   string ResponseName     = CL.Get("ResponseName",      "HResponse");
-   string ResponseTruth    = CL.Get("ResponseTruth",     "HMCGen");
-   string ResponseMeasured = CL.Get("ResponseMeasured",  "HMCReco");
-   string Output           = CL.Get("Output",            "Unfolded.root");
-   string PriorChoice      = CL.Get("Prior",             "Original");
-   bool DoBayes            = CL.GetBool("DoBayes",       true);
-   bool DoSVD              = CL.GetBool("DoSVD",         true);
-   bool DoInvert           = CL.GetBool("DoInvert",      true);
-   bool DoTUnfold          = CL.GetBool("DoTUnfold",     true);
-   bool DoFit              = CL.GetBool("DoFit",         true);
-   bool DoFoldNormalize    = CL.GetBool("FoldNormalize", false);
-   bool DoToyError         = CL.GetBool("DoToyError",    false);
+   string InputFileName    = CL.Get("Input",               "Input/DataJetPNominal.root");
+   string DataName         = CL.Get("InputName",           "HDataReco");
+   string ResponseName     = CL.Get("ResponseName",        "HResponse");
+   string ResponseTruth    = CL.Get("ResponseTruth",       "HMCGen");
+   string ResponseMeasured = CL.Get("ResponseMeasured",    "HMCReco");
+   string Output           = CL.Get("Output",              "Unfolded.root");
+   string PriorChoice      = CL.Get("Prior",               "Original");
+   bool DoBayes            = CL.GetBool("DoBayes",         true);
+   bool DoRepeatedBayes    = CL.GetBool("DoRepeatedBayes", true);
+   bool DoSVD              = CL.GetBool("DoSVD",           true);
+   bool DoInvert           = CL.GetBool("DoInvert",        true);
+   bool DoTUnfold          = CL.GetBool("DoTUnfold",       true);
+   bool DoFit              = CL.GetBool("DoFit",           true);
+   bool DoFoldNormalize    = CL.GetBool("FoldNormalize",   false);
+   bool DoToyError         = CL.GetBool("DoToyError",      false);
    
    RooUnfold::ErrorTreatment ErrorChoice = RooUnfold::kErrors;
    if(DoToyError == true)
@@ -292,6 +293,35 @@ int main(int argc, char *argv[])
          TH1D *HFold = ForwardFold(HUnfolded[HUnfolded.size()-1], HResponse);
          HFold->SetName(Form("HRefoldedBayes%d", I));
          HRefolded.push_back(HFold);
+      }
+   }
+
+   if(DoRepeatedBayes == true)
+   {
+      TH1D *HCurrentPrior = ConstructPriorCopy(HPrior);
+
+      for(int I = 1; I <= 100; I++)
+      {
+         ReweightResponse(HResponse, HCurrentPrior);
+
+         TH1D *HGenStep = nullptr;
+         TH1D *HRecoStep = nullptr;
+         DoProjection(HResponse, &HGenStep, &HRecoStep);
+         RooUnfoldResponse ResponseStep(HRecoStep, HGenStep, HResponse);
+         
+         RooUnfoldBayes BayesUnfold(&ResponseStep, HInput, 1);
+         BayesUnfold.SetVerbose(-1);
+         HUnfolded.push_back((TH1 *)(BayesUnfold.Hreco(ErrorChoice)->Clone(Form("HUnfoldedRepeatedBayes%d", I))));
+         Covariance.insert(pair<string, TMatrixD>(Form("MUnfoldedRepeatedBayes%d", I), BayesUnfold.Ereco()));
+         TH1D *HFold = ForwardFold(HUnfolded[HUnfolded.size()-1], HResponse);
+         HFold->SetName(Form("HRefoldedRepeatedBayes%d", I));
+         HRefolded.push_back(HFold);
+
+         delete HGenStep;
+         delete HRecoStep;
+         
+         delete HCurrentPrior;
+         HCurrentPrior = ConstructPriorCopy((TH1D *)BayesUnfold.Hreco(ErrorChoice));
       }
    }
 
@@ -560,7 +590,10 @@ void ReweightResponse(TH2D *HResponse, TH1D *HPrior, bool NormalizePrior)
       for(int Y = 1; Y <= NY; Y++)
       {
          if(Total[Y-1] > 0)
+         {
             HResponse->SetBinContent(X, Y, HResponse->GetBinContent(X, Y) / Total[Y-1] * HPrior->GetBinContent(Y));
+            HResponse->SetBinError(X, Y, HResponse->GetBinError(X, Y) / Total[Y-1] * HPrior->GetBinContent(Y));
+         }
       }
    }
 }
@@ -671,6 +704,8 @@ TH1D *ForwardFold(TH1 *HGen, TH2D *HResponse)
 
    TH1D *HResult = new TH1D(Form("HFold%d", Count), "", NReco, 0, NReco);
 
+   HResult->Sumw2();
+
    for(int iG = 1; iG <= NGen; iG++)
    {
       double N = 0;
@@ -681,7 +716,25 @@ TH1D *ForwardFold(TH1 *HGen, TH2D *HResponse)
          continue;
 
       for(int iR = 1; iR <= NReco; iR++)
-         HResult->AddBinContent(iR, HResponse->GetBinContent(iR, iG) * HGen->GetBinContent(iG) / N);
+      {
+         double T = HResponse->GetBinContent(iR, iG) / N;
+         double G = HGen->GetBinContent(iG);
+         double ET = HResponse->GetBinError(iR, iG) / HResponse->GetBinContent(iR, iG);
+         double EG = HGen->GetBinError(iG) / HGen->GetBinContent(iG);
+
+         if(HResponse->GetBinContent(iR, iG) == 0)
+            ET = 0;
+
+         double V = T * G;
+         double E = sqrt(ET * ET + EG * EG) * V;
+
+         double Current = HResult->GetBinContent(iR);
+         HResult->SetBinContent(iR, Current + V);
+
+         double Error = HResult->GetBinError(iR);
+         Error = sqrt(Error * Error + E * E);
+         HResult->SetBinError(iR, Error);
+      }
    }
 
    return HResult;

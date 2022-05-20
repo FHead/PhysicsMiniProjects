@@ -14,7 +14,7 @@ Execute: Unfold1D.cpp
 	g++ `root-config --cflags --glibs` Unfold1D.cpp -o Execute \
 		-lUnfold -lRooFitCore -lRooFit -lMinuit -lFoam -lRooStats \
 		-I/Users/yichen/Programs/RooUnfold/RooUnfold/build \
-      -L/Users/yichen/Programs/RooUnfold/RooUnfold/build -lRooUnfold
+		-L/Users/yichen/Programs/RooUnfold/RooUnfold/build -lRooUnfold
 
 RunTest: Execute
 	./Execute --Input Input/PPDPhi.root --Output Output/PPDPhi.root \
