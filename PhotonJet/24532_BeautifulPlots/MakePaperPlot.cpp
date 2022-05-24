@@ -44,8 +44,9 @@ double AddUp(TH1D *H, double XMin, double XMax, vector<double> Bins);
 vector<TGraphAsymmErrors> TranscribeMC(string FileName, string HistogramName,
    double MinOverwrite, double MaxOverwrite, double XMin, double XMax,
    bool DoSelfNormalize = false, double Scale = 1,
-   bool ApplyCorrection = false, string CorrectionFileName = "NONE", string CorrectionState = "NONE");
-pair<double, double> GetGraphMinMax(string FileName, string HistogramName, vector<double> GenBins);
+   bool ApplyCorrection = false, string CorrectionFileName = "NONE", string CorrectionState = "NONE",
+   bool DoReco = false);
+pair<double, double> GetGraphMinMax(string FileName, string HistogramName, vector<double> Bins);
 
 int main(int argc, char *argv[])
 {
@@ -70,7 +71,11 @@ int main(int argc, char *argv[])
    double ExtraScale              = CL.GetDouble("ExtraScale", 1.00);
    string CorrectionFileName      = CL.Get("CorrectionFile", "NONE");
    string CorrectionState         = CL.Get("CorrectionState", "NONE");
+   bool DoReco                    = CL.GetBool("DoReco", false);
 
+   double PrimaryMinOverwrite     = DoReco ? RecoPrimaryMinOverwrite : GenPrimaryMinOverwrite;
+   double PrimaryMaxOverwrite     = DoReco ? RecoPrimaryMaxOverwrite : GenPrimaryMaxOverwrite;
+   
    vector<string> MCFileNames     = CL.GetStringVector("MCFile", vector<string>{InputFileName});
    vector<string> MCHistNames     = CL.GetStringVector("MCHistogram", vector<string>{"HMCTruth"});
    vector<string> MCLabels        = CL.GetStringVector("MCLabel", vector<string>{"PYTHIA6"});
@@ -105,6 +110,7 @@ int main(int argc, char *argv[])
    double LegendX                 = CL.GetDouble("LegendX", 0.5);
    double LegendY                 = CL.GetDouble("LegendY", 0.5);
    double LegendSize              = CL.GetDouble("LegendSize", 0.075);
+   string DataLabel               = CL.Get("DataLabel", "Data");
 
    Assert(DoSelfNormalize == false || DoEventNormalize == false, "Multiple normalization option chosen!");
 
@@ -125,12 +131,21 @@ int main(int argc, char *argv[])
    if(DoEventNormalize == true)
       Assert(InputFile.Get("DataBaselineEventCount") != nullptr, "No event count found in input file but option enabled");
 
-   vector<double> GenBins1
-      = DetectBins((TH1D *)InputFile.Get("HGenPrimaryBinMin"), (TH1D *)InputFile.Get("HGenPrimaryBinMax"));
-   vector<double> GenBins2
-      = DetectBins((TH1D *)InputFile.Get("HGenBinningBinMin"), (TH1D *)InputFile.Get("HGenBinningBinMax"));
-   GenBins1[0] = GenPrimaryMinOverwrite;
-   GenBins1[GenBins1.size()-1] = GenPrimaryMaxOverwrite;
+   vector<double> Bins1, Bins2;
+
+   if(DoReco == true)
+   {
+      Bins1 = DetectBins((TH1D *)InputFile.Get("HRecoPrimaryBinMin"), (TH1D *)InputFile.Get("HRecoPrimaryBinMax"));
+      Bins2 = DetectBins((TH1D *)InputFile.Get("HRecoBinningBinMin"), (TH1D *)InputFile.Get("HRecoBinningBinMax"));
+   }
+   else
+   {
+      Bins1 = DetectBins((TH1D *)InputFile.Get("HGenPrimaryBinMin"), (TH1D *)InputFile.Get("HGenPrimaryBinMax"));
+      Bins2 = DetectBins((TH1D *)InputFile.Get("HGenBinningBinMin"), (TH1D *)InputFile.Get("HGenBinningBinMax"));
+   }
+   
+   Bins1[0] = PrimaryMinOverwrite;
+   Bins1[Bins1.size()-1] = PrimaryMaxOverwrite;
 
    vector<string> H1Names{"HInput", "HMCMeasured", "HMCTruth"};
 
@@ -142,10 +157,10 @@ int main(int argc, char *argv[])
       H1[Name] = (TH1D *)InputFile.Get(Name.c_str());
 
    if(CorrectionFileName != "NONE" && CorrectionState != "NONE")
-      DoCorrection(CorrectionFileName, CorrectionState, H1[PrimaryName], GenBins1, GenBins2);
+      DoCorrection(CorrectionFileName, CorrectionState, H1[PrimaryName], Bins1, Bins2);
 
    if(DoSelfNormalize == true)
-      SelfNormalize(H1[PrimaryName], GenBins1, GenBins2);
+      SelfNormalize(H1[PrimaryName], Bins1, Bins2);
    else
    {
       if(DoEventNormalize == true)
@@ -171,14 +186,14 @@ int main(int argc, char *argv[])
 
    for(int i = 0; i < (int)Group.size(); i++)
    {
-      if(Group[i] < 0 || Group[i] >= (int)GenBins2.size() - 1)
+      if(Group[i] < 0 || Group[i] >= (int)Bins2.size() - 1)
       {
          Group.erase(Group.begin() + i);
          i = i - 1;
       }
    }
 
-   int BinningCount = GenBins2.size() - 1;
+   int BinningCount = Bins2.size() - 1;
    if(BinningCount == 1)
    {
       Group = vector<int>{0};
@@ -217,22 +232,22 @@ int main(int argc, char *argv[])
    //    InsideTextSize = 0.070;
    // }
 
-   vector<TGraphAsymmErrors> GResult = Transcribe(H1[PrimaryName], GenBins1, GenBins2, nullptr);
-   vector<TGraphAsymmErrors> GSystematics = Transcribe(H1["HSystematicsPlus"], GenBins1, GenBins2, H1["HSystematicsMinus"]);
+   vector<TGraphAsymmErrors> GResult = Transcribe(H1[PrimaryName], Bins1, Bins2, nullptr);
+   vector<TGraphAsymmErrors> GSystematics = Transcribe(H1["HSystematicsPlus"], Bins1, Bins2, H1["HSystematicsMinus"]);
    
    vector<vector<TGraphAsymmErrors>> GMC(MCCount);
    for(int i = 0; i < MCCount; i++)
    {
-      pair<double, double> GraphMinMax = GetGraphMinMax(MCFileNames[i], MCHistNames[i], GenBins1);
+      pair<double, double> GraphMinMax = GetGraphMinMax(MCFileNames[i], MCHistNames[i], Bins1);
       cout << GraphMinMax.first << " " << GraphMinMax.second << endl;
       double PrimaryScale = AddUp(H1[PrimaryName],
          max(WorldXMin, GraphMinMax.first),
          min(WorldXMax, GraphMinMax.second),
-         GenBins1);
+         Bins1);
       GMC[i] = TranscribeMC(MCFileNames[i], MCHistNames[i],
-         GenPrimaryMinOverwrite, GenPrimaryMaxOverwrite,
+         PrimaryMinOverwrite, PrimaryMaxOverwrite,
          WorldXMin, WorldXMax, DoSelfNormalize, PrimaryScale,
-         MCCorrection[i], CorrectionFileName, CorrectionState);
+         MCCorrection[i], CorrectionFileName, CorrectionState, DoReco);
    }
    
    // for(TGraphAsymmErrors G : GResult)
@@ -322,7 +337,7 @@ int main(int argc, char *argv[])
    for(int i = 0; i < Row; i++)
       Latex.DrawLatex(PadX0 * 0.3, PadY0 + PadDR * (i + 1.0) + PadDY * (i + 0.5), YLabel.c_str());
    for(int i = 0; i < Row; i++)
-      Latex.DrawLatex(PadX0 * 0.3, PadY0 + PadDR * (i + 0.5) + PadDY * i, "Ratio to Data");
+      Latex.DrawLatex(PadX0 * 0.3, PadY0 + PadDR * (i + 0.5) + PadDY * i, Form("Ratio to %s", DataLabel.c_str()));
 
    // Setup general information
    // Latex.SetTextAngle(0);
@@ -358,11 +373,11 @@ int main(int argc, char *argv[])
          Pads[Index]->cd();
 
          string BinLabel = "";
-         if(GenBins2[Group[i]] > -999)
-            BinLabel = BinLabel + Form("%.1f < ", GenBins2[Group[i]]);
+         if(Bins2[Group[i]] > -999)
+            BinLabel = BinLabel + Form("%.1f < ", Bins2[Group[i]]);
          BinLabel = BinLabel + BinningLabel;
-         if(GenBins2[Group[i]+1] < 999)
-            BinLabel = BinLabel + Form(" < %.1f", GenBins2[Group[i]+1]);
+         if(Bins2[Group[i]+1] < 999)
+            BinLabel = BinLabel + Form(" < %.1f", Bins2[Group[i]+1]);
 
          Latex.SetTextAngle(0);
          Latex.SetTextFont(42);
@@ -378,7 +393,7 @@ int main(int argc, char *argv[])
    Legend.SetTextSize(LegendSize);
    Legend.SetFillStyle(0);
    Legend.SetBorderSize(0);
-   Legend.AddEntry(&GSystematics[BinningCount-1], "Data", "plf");
+   Legend.AddEntry(&GSystematics[BinningCount-1], DataLabel.c_str(), "plf");
    for(int j = 0; j < MCCount; j++)
       Legend.AddEntry(&GMC[j][BinningCount-1], MCLabels[j].c_str(), "l");
 
@@ -832,7 +847,7 @@ double AddUp(TH1D *H, double XMin, double XMax, vector<double> Bins)
 
 vector<TGraphAsymmErrors> TranscribeMC(string FileName, string HistogramName,
    double MinOverwrite, double MaxOverwrite, double XMin, double XMax, bool DoSelfNormalize, double Scale,
-   bool ApplyCorrection, string CorrectionFileName, string CorrectionState)
+   bool ApplyCorrection, string CorrectionFileName, string CorrectionState, bool DoReco)
 {
    vector<TGraphAsymmErrors> G;
 
@@ -898,30 +913,38 @@ vector<TGraphAsymmErrors> TranscribeMC(string FileName, string HistogramName,
 
    TH1D *H = (TH1D *)Object;
 
-   vector<double> GenBins1
-      = DetectBins((TH1D *)File.Get("HGenPrimaryBinMin"), (TH1D *)File.Get("HGenPrimaryBinMax"));
-   vector<double> GenBins2
-      = DetectBins((TH1D *)File.Get("HGenBinningBinMin"), (TH1D *)File.Get("HGenBinningBinMax"));
-   GenBins1[0] = MinOverwrite;
-   GenBins1[GenBins1.size()-1] = MaxOverwrite;
+   vector<double> Bins1, Bins2;
+
+   if(DoReco == false)
+   {
+      Bins1 = DetectBins((TH1D *)File.Get("HGenPrimaryBinMin"), (TH1D *)File.Get("HGenPrimaryBinMax"));
+      Bins2 = DetectBins((TH1D *)File.Get("HGenBinningBinMin"), (TH1D *)File.Get("HGenBinningBinMax"));
+   }
+   else
+   {
+      Bins1 = DetectBins((TH1D *)File.Get("HRecoPrimaryBinMin"), (TH1D *)File.Get("HRecoPrimaryBinMax"));
+      Bins2 = DetectBins((TH1D *)File.Get("HRecoBinningBinMin"), (TH1D *)File.Get("HRecoBinningBinMax"));
+   }
+   Bins1[0] = MinOverwrite;
+   Bins1[Bins1.size()-1] = MaxOverwrite;
 
    if(ApplyCorrection == true)
-      DoCorrection(CorrectionFileName, CorrectionState, H, GenBins1, GenBins2);
+      DoCorrection(CorrectionFileName, CorrectionState, H, Bins1, Bins2);
 
-   double Total = AddUp(H, XMin, XMax, GenBins1);
+   double Total = AddUp(H, XMin, XMax, Bins1);
    H->Scale(Scale / Total);
 
    if(DoSelfNormalize == true)
-      SelfNormalize(H, GenBins1, GenBins2);
+      SelfNormalize(H, Bins1, Bins2);
 
-   G = Transcribe(H, GenBins1, GenBins2);
+   G = Transcribe(H, Bins1, Bins2);
 
    File.Close();
 
    return G;
 }
 
-pair<double, double> GetGraphMinMax(string FileName, string HistogramName, vector<double> GenBins)
+pair<double, double> GetGraphMinMax(string FileName, string HistogramName, vector<double> Bins)
 {
    TFile File(FileName.c_str());
 
@@ -954,11 +977,11 @@ pair<double, double> GetGraphMinMax(string FileName, string HistogramName, vecto
       Min = ((TH1D *)Object)->GetXaxis()->GetBinLowEdge(1);
       Max = ((TH1D *)Object)->GetXaxis()->GetBinUpEdge(((TH1D *)Object)->GetNbinsX());
 
-      while(Max > GenBins.size())
-         Max = Max - (GenBins.size() - 1);
+      while(Max > Bins.size())
+         Max = Max - (Bins.size() - 1);
 
-      Min = GenBins[Min+1];
-      Max = GenBins[Max];
+      Min = Bins[Min+1];
+      Max = Bins[Max];
    }
 
    File.Close();
