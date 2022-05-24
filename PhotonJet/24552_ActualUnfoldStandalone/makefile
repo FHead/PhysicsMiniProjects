@@ -8,14 +8,12 @@ Prepare:
 
 DeepClean: Clean
 	rm -rf RooUnfold
-	rm -rf TUnfold
-	rm -f TUnfoldV17.9.tgz
 
 Clean:
 	rm -f Output/*root
 	rm -f Plots/*pdf
 
-SetupPrerequisites: SetupRooUnfold SetupTUnfold
+SetupPrerequisites: SetupRooUnfold
 
 SetupRooUnfold:
 	git clone ssh://git@gitlab.cern.ch:7999/RooUnfold/RooUnfold.git
@@ -25,20 +23,16 @@ SetupRooUnfoldCMake:
 	git clone ssh://git@gitlab.cern.ch:7999/RooUnfold/RooUnfold.git
 	(cd RooUnfold/ && mkdir -p build && cd build/ && cmake .. && make -j4)
 
-SetupTUnfold:
-	curl https://www.desy.de/~sschmitt/TUnfold/TUnfold_V17.9.tgz -o TUnfold_V17.9.tgz
-	mkdir -p TUnfold/
-	tar zxvf TUnfold_V17.9.tgz --directory TUnfold/
-	(cd TUnfold && make lib)
-
 Execute: Unfold1D.cpp
-	# CompileRootMacro Unfold1D.cpp Execute -lUnfold
 	g++ Unfold1D.cpp -o Execute \
-		-IRooUnfold/build -LRooUnfold/build -lRooUnfold \
+		-IRooUnfold/src -LRooUnfold/ -lRooUnfold \
 		`root-config --cflags --glibs`
-		# -ITUnfold/ -LTUnfold/  -lunfold \
-		# RooUnfold/build/*/obj/*.o
-		# TUnfold/*.o RooUnfold/build/*/obj/*.o
+
+# If you use the CMake version
+# Execute: Unfold1D.cpp
+# 	g++ Unfold1D.cpp -o Execute \
+# 		-IRooUnfold/build -LRooUnfold/build -lRooUnfold \
+# 		`root-config --cflags --glibs`
 
 RunTest: Execute
 	./Execute --Input Input/PPDPhi.root --Output Output/PPDPhi.root \
