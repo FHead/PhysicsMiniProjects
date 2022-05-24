@@ -8,15 +8,10 @@ Everything depends on `ROOT` so make sure it is available before going into othe
 Once you check-out/download the code, first we need to get `TUnfold` and `RooUnfold`.  They can be done with
 
 ```
-make SetupTUnfold
-make SetupRooUnfold
+make SetupRooUnfoldCMake
 ```
 
-Or more precisely
-
-```
-make SetupPrerequisites
-```
+(or `make SetupRooUnfoldMake` if your cmake version is too old and it's not easy to update)
 
 This only needs to be done once!  If things are messed up, we can do
 
@@ -29,6 +24,9 @@ to return to the initial state and try again.
 
 
 ## Compiling code
+
+Depending on whether you used the `cmake` or the `make` version to compile RooUnfold, change the `makefile` accordingly.
+
 
 Do
 
