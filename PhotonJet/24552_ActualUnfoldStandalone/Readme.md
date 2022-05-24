@@ -3,6 +3,8 @@
 
 ## Setting up
 
+Everything depends on `ROOT` so make sure it is available before going into other steps
+
 Once you check-out/download the code, first we need to get `TUnfold` and `RooUnfold`.  They can be done with
 
 ```

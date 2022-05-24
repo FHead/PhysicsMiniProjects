@@ -18,7 +18,7 @@ Clean:
 SetupPrerequisites: SetupRooUnfold SetupTUnfold
 
 SetupRooUnfold:
-	ssh://git@gitlab.cern.ch:7999/RooUnfold/RooUnfold.git
+	git clone ssh://git@gitlab.cern.ch:7999/RooUnfold/RooUnfold.git
 	(cd RooUnfold && mkdir -p build)
 	(cd RooUnfold/build && cmake .. && make -j4)
 
