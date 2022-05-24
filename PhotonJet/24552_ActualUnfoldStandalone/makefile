@@ -21,6 +21,10 @@ SetupRooUnfold:
 	git clone ssh://git@gitlab.cern.ch:7999/RooUnfold/RooUnfold.git
 	(cd RooUnfold/ && make -j4)
 
+SetupRooUnfoldCMake:
+	git clone ssh://git@gitlab.cern.ch:7999/RooUnfold/RooUnfold.git
+	(cd RooUnfold/ && mkdir -p build && cd build/ && cmake .. && make -j4)
+
 SetupTUnfold:
 	curl https://www.desy.de/~sschmitt/TUnfold/TUnfold_V17.9.tgz -o TUnfold_V17.9.tgz
 	mkdir -p TUnfold/
@@ -30,9 +34,9 @@ SetupTUnfold:
 Execute: Unfold1D.cpp
 	# CompileRootMacro Unfold1D.cpp Execute -lUnfold
 	g++ Unfold1D.cpp -o Execute \
-		-IRooUnfold/src -LRooUnfold/ -lRooUnfold \
-		-ITUnfold/ -LTUnfold/  -lunfold \
+		-IRooUnfold/build -LRooUnfold/build -lRooUnfold \
 		`root-config --cflags --glibs`
+		# -ITUnfold/ -LTUnfold/  -lunfold \
 		# RooUnfold/build/*/obj/*.o
 		# TUnfold/*.o RooUnfold/build/*/obj/*.o
 
