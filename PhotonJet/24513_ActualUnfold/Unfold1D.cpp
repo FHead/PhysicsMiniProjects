@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
          delete HRecoStep;
          
          delete HCurrentPrior;
-         HCurrentPrior = ConstructPriorCopy((TH1D *)BayesUnfold.Hreco(ErrorChoice));
+         HCurrentPrior = ConstructPriorCopy((TH1D *)HUnfolded[HUnfolded.size()-1]);
       }
    }
 
@@ -608,7 +608,10 @@ TH1D *ConstructPriorCopy(TH1D *HMC)
 
    int N = HPrior->GetNbinsX();
    for(int i = 1; i <= N; i++)
+   {
       HPrior->SetBinContent(i, HMC->GetBinContent(i));
+      HPrior->SetBinError(i, HMC->GetBinError(i));
+   }
    HPrior->Scale(1 / HPrior->Integral());
 
    return HPrior;

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in `ls MollyInput20220518/ | grep Nominal`
+for i in `ls MollyInput20220518/`
 do
    echo $i
 	./Execute --Input MollyInput20220518/$i \
