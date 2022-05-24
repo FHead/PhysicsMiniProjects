@@ -19,8 +19,7 @@ SetupPrerequisites: SetupRooUnfold SetupTUnfold
 
 SetupRooUnfold:
 	git clone ssh://git@gitlab.cern.ch:7999/RooUnfold/RooUnfold.git
-	(cd RooUnfold && mkdir -p build)
-	(cd RooUnfold/build && cmake .. && make -j4)
+	(cd RooUnfold/ && make -j4)
 
 SetupTUnfold:
 	curl https://www.desy.de/~sschmitt/TUnfold/TUnfold_V17.9.tgz -o TUnfold_V17.9.tgz
@@ -31,9 +30,11 @@ SetupTUnfold:
 Execute: Unfold1D.cpp
 	# CompileRootMacro Unfold1D.cpp Execute -lUnfold
 	g++ Unfold1D.cpp -o Execute \
-		-IRooUnfold/build -LRooUnfold/build/ -lRooUnfold \
-		-ITUnfold/ -LTUnfold/ -lunfold \
+		-IRooUnfold/src -LRooUnfold/ -lRooUnfold \
+		-ITUnfold/ -LTUnfold/  -lunfold \
 		`root-config --cflags --glibs`
+		# RooUnfold/build/*/obj/*.o
+		# TUnfold/*.o RooUnfold/build/*/obj/*.o
 
 RunTest: Execute
 	./Execute --Input Input/PPDPhi.root --Output Output/PPDPhi.root \
