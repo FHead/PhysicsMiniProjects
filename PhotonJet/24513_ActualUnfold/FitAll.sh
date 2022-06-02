@@ -1,10 +1,16 @@
 #!/bin/bash
 
-for i in `ls MollyInput20220518/`
+Tag=20220601
+mkdir -p MollyOutput$Tag
+
+echo Running tag $Tag
+echo
+
+for i in `ls MollyInput$Tag/ | grep Fine`
 do
    echo $i
-	./Execute --Input MollyInput20220518/$i \
-      --Output MollyOutput20220518/$i \
+	./Execute --Input MollyInput$Tag/$i \
+      --Output MollyOutput$Tag/$i \
 		--Prior MC \
-      --DoBayes true --DoRepeatedBayes true --DoSVD false --DoInvert true --DoTUnfold false --DoFit true
+      --DoBayes true --DoRepeatedBayes false --DoSVD false --DoTSVD false --DoInvert true --DoTUnfold false --DoFit true
 done
