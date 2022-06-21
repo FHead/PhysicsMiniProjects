@@ -14,5 +14,13 @@ Nodes[0]->P.GetEta()
 Nodes[0]->P.GetPhi()
 ```
 
+See example usage in the `TestCATree.cpp` source file.  To test run the file, simply compile with g++
+
+```
+g++ TestCATree.cpp -o Execute
+./Execute
+```
+
+
 
 
