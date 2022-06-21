@@ -7,7 +7,7 @@ using namespace std;
 int main()
 {
    // Declare the node object vectors
-   vector<Node *> NodesEScheme, NodesWTAScheme;
+   vector<Node *> NodesEScheme, NodesWTAScheme, NodesCATree;
 
    // Loop over jet constituents.  Here we use a toy with 25 particles
    for(int i = 0; i < 25; i++)
@@ -19,18 +19,20 @@ int main()
       // Add into the node object vector
       NodesEScheme.push_back(new Node(P));
       NodesWTAScheme.push_back(new Node(P));
+      NodesCATree.push_back(new Node(P));
    }
 
    // Do the reclustering!
    BuildCATree(NodesEScheme, -1, EScheme);
    BuildCATree(NodesWTAScheme, -1, WTAScheme);
+   BuildCATree(NodesCATree, 0, EScheme);
 
    // Some output
    cout << "EScheme: " << NodesEScheme[0]->P.GetEta() << " " << NodesEScheme[0]->P.GetPhi() << endl;
    cout << "WTAScheme: " << NodesWTAScheme[0]->P.GetEta() << " " << NodesWTAScheme[0]->P.GetPhi() << endl;
 
    // Find soft drop node.  In this case z = 0.1, beta = 0.0, RJet = 0.4
-   Node *SDNode = FindSDNode(NodesEScheme[0], 0.1, 0.0, 0.4);
+   Node *SDNode = FindSDNode(NodesCATree[0], 0.1, 0.0, 0.4);
    if(SDNode->N > 1)
    {
       FourVector Subjet1 = SDNode->Child1->P;
@@ -44,7 +46,7 @@ int main()
       cout << "Groomed result (0.1, 0.0): -1 -1 -1" << endl;
    
    // Do another soft drop setting
-   SDNode = FindSDNode(NodesEScheme[0], 0.5, 1.5, 0.4);
+   SDNode = FindSDNode(NodesCATree[0], 0.5, 1.5, 0.4);
    if(SDNode->N > 1)
    {
       FourVector Subjet1 = SDNode->Child1->P;
@@ -58,7 +60,7 @@ int main()
       cout << "Groomed result (0.5, 1.5): -1 -1 -1" << endl;
 
    // Clean up is important.  We only need to delete the root node and everything will be cleaned
-   delete NodesEScheme[0], NodesWTAScheme[0];
+   delete NodesEScheme[0], NodesWTAScheme[0], NodesCATree[0];
 
    return 0;
 }
