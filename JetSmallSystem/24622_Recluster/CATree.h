@@ -1,3 +1,8 @@
+// CATree.h, Jun 21 2022
+// Original author: Yi Chen
+// This code does jet reclustering!  It's a watered-down version of the full CATree.h Yi is using for her analysis
+// Can easily add soft drop in here if needed.
+
 #include <algorithm>
 #include <cmath>
 #include <iostream>
