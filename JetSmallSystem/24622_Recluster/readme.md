@@ -16,7 +16,7 @@ Nodes[0]->P.GetEta()
 Nodes[0]->P.GetPhi()
 ```
 
-## Behind the scheme
+## Behind the scene
 
 The `BuildCATree(...)` function rearranges all the nodes in the vector into a binary tree based on clustering algorithm and recombination scheme.  After the function is done, there should only be one single entry in the vector containing the root node of the tree (all others should be linked as children).
 
