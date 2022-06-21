@@ -29,7 +29,7 @@ Then we can get the four vector as follows
 - `SDNode->Child1->P`: leading subjet 4-vector
 - `SDNode->Child2->P`: subleading subjet 4-vector
 
-There are some completely groomed-away cases.  If `SDNode->N == 1` it means nothing is left after grooming.
+There are some completely groomed-away cases.  If `SDNode->N == 1` it means nothing is left after grooming.  In this case `Child1` and `Child2` will be `nullptr`.  Be careful!
 
 
 
