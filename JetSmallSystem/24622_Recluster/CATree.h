@@ -1,7 +1,8 @@
 // CATree.h, Jun 21 2022
 // Original author: Yi Chen
-// This code does jet reclustering!  It's a watered-down version of the full CATree.h Yi is using for her analysis
-// Can easily add soft drop-type grooming in here if needed.
+// This code does jet reclustering!  It's a watered-down version of the full CATree.h
+//    that Yi is using for her many analyses.
+// Can easily add various substructure algorithms that uses the binary tree structure in here if needed.
 
 #include <algorithm>
 #include <cmath>
