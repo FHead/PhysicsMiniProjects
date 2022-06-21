@@ -3,7 +3,7 @@
 
 ## Reclustering
 
-You need to include CATree.h and make a vector of `Node *` object.
+You need to include `CATree.h` and make a vector of `Node *` object.
 
 Then call `BuildCATree(vector<Node *> &Nodes, double p, int Scheme)` to do the reclustering.
 - `p = 0` => Cambridge-Aachen, `p = -1` => anti-KT clustering
@@ -15,6 +15,13 @@ After it's done, the head node (`Nodes[0]`) is the full reclustered jet.  We can
 Nodes[0]->P.GetEta()
 Nodes[0]->P.GetPhi()
 ```
+
+## Behind the scheme
+
+The `BuildCATree(...)` function rearranges all the nodes in the vector into a binary tree based on clustering algorithm and recombination scheme.  After the function is done, there should only be one single entry in the vector containing the root node of the tree (all others should be linked as children).
+
+Once we have this binary tree structure, one can easily run many different algorithms (for example soft drop grooming, subjet reclustering, etc)
+
 
 ## Soft drop
 
