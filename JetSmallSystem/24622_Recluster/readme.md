@@ -3,7 +3,7 @@
 
 ## Reclustering
 
-You need to include `CATree.h` and make a vector of `Node *` object.
+You need to include `CATree.h` (which then includes `TauHelperFunctions3.h`) and make a vector of `Node *` object.
 
 Then call `BuildCATree(vector<Node *> &Nodes, double p, int Scheme)` to do the reclustering.
 - `p = 0` => Cambridge-Aachen, `p = -1` => anti-KT clustering
