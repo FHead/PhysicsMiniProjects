@@ -29,6 +29,34 @@ int main()
    cout << "EScheme: " << NodesEScheme[0]->P.GetEta() << " " << NodesEScheme[0]->P.GetPhi() << endl;
    cout << "WTAScheme: " << NodesWTAScheme[0]->P.GetEta() << " " << NodesWTAScheme[0]->P.GetPhi() << endl;
 
+   // Find soft drop node.  In this case z = 0.1, beta = 0.0, RJet = 0.4
+   Node *SDNode = FindSDNode(NodesEScheme[0], 0.1, 0.0, 0.4);
+   if(SDNode->N > 1)
+   {
+      FourVector Subjet1 = SDNode->Child1->P;
+      FourVector Subjet2 = SDNode->Child2->P;
+      double ZG = min(Subjet1.GetPT(), Subjet2.GetPT()) / (Subjet1.GetPT() + Subjet2.GetPT());
+      double RG = GetDR(Subjet1, Subjet2);
+      double MG = (Subjet1 + Subjet2).GetMass();
+      cout << "Groomed result (0.1, 0.0): " << ZG << " " << RG << " " << MG << endl;
+   }
+   else
+      cout << "Groomed result (0.1, 0.0): -1 -1 -1" << endl;
+   
+   // Do another soft drop setting
+   SDNode = FindSDNode(NodesEScheme[0], 0.5, 1.5, 0.4);
+   if(SDNode->N > 1)
+   {
+      FourVector Subjet1 = SDNode->Child1->P;
+      FourVector Subjet2 = SDNode->Child2->P;
+      double ZG = min(Subjet1.GetPT(), Subjet2.GetPT()) / (Subjet1.GetPT() + Subjet2.GetPT());
+      double RG = GetDR(Subjet1, Subjet2);
+      double MG = (Subjet1 + Subjet2).GetMass();
+      cout << "Groomed result (0.5, 1.5): " << ZG << " " << RG << " " << MG << endl;
+   }
+   else
+      cout << "Groomed result (0.5, 1.5): -1 -1 -1" << endl;
+
    // Clean up is important.  We only need to delete the root node and everything will be cleaned
    delete NodesEScheme[0], NodesWTAScheme[0];
 

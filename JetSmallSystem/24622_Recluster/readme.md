@@ -1,9 +1,11 @@
 
 # Recalculate WTA axis from constituent
 
+## Reclustering
+
 You need to include CATree.h and make a vector of `Node *` object.
 
-Then call `BuildCATreE(vector<Node *> &Nodes, double p, int Scheme)` to do the reclustering.
+Then call `BuildCATree(vector<Node *> &Nodes, double p, int Scheme)` to do the reclustering.
 - `p = 0` => Cambridge-Aachen, `p = -1` => anti-KT clustering
 - `Scheme` = `EScheme` or `WTAScheme`
 
@@ -14,12 +16,33 @@ Nodes[0]->P.GetEta()
 Nodes[0]->P.GetPhi()
 ```
 
+## Soft drop
+
+Once we have the `BuildCATree` step done, all we need is to call `FindSDNode(Node *Head, double Z, double beta, double R)` to get the node corresponding to the soft drop result
+
+```
+Node *SDNode = FindSDNode(Nodes[0], 0.1, 0.0, 0.4);
+```
+
+Then we can get the four vector as follows
+- `SDNode->P`: groomed jet 4-vector
+- `SDNode->Child1->P`: leading subjet 4-vector
+- `SDNode->Child2->P`: subleading subjet 4-vector
+
+There are some completely groomed-away cases.  If `SDNode->N == 1` it means nothing is left after grooming.
+
+
+
+## Example
+
 See example usage in the `TestCATree.cpp` source file.  To test run the file, simply compile with g++
 
 ```
 g++ TestCATree.cpp -o Execute
 ./Execute
 ```
+
+
 
 
 
