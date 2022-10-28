@@ -20,7 +20,7 @@ TestRunGraph: ExecuteGraph
 	./ExecuteGraph --DHFile vn.dh --Output Graphs.root
 
 Execute: ConvertToDHFile.cpp
-	CompileRootMacro ConvertToDHFile.cpp Execute
+	g++ ConvertToDHFile.cpp -o Execute `root-config --cflags --libs`
 
 ExecuteGraph: ConvertToGraph.cpp
-	CompileRootMacro ConvertToGraph.cpp ExecuteGraph
+	g++ ConvertToGraph.cpp -o ExecuteGraph `root-config --cflags --libs`
