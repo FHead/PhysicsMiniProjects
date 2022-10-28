@@ -17,7 +17,7 @@ using namespace std;
 #include "CustomAssert.h"
 #include "CommandLine.h"
 #include "SetStyle.h"
-#include "Code/DrawRandom.h"
+#include "DrawRandom.h"
 #include "DataHelper.h"
 
 int main(int argc, char *argv[]);

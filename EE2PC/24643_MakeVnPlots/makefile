@@ -46,7 +46,7 @@ TestRun: Execute
 	bash AddMODLow.sh Plots/Thrust_Multiplicity_50_None_v2_SquareShiftZoom_Overlay.pdf
 
 Execute: MakePlot.cpp
-	CompileRootMacro MakePlot.cpp Execute
+	g++ MakePlot.cpp -o Execute `root-config --cflags --libs`
 	mkdir -p Plots
 
 Deploy:
