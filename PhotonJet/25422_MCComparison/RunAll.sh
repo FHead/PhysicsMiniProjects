@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Fraction=0.10
+Fraction=0.01
 
 for i in 15_30 30_50 50_80 80_120 120_170 170_2000
 do
