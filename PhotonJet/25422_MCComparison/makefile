@@ -28,7 +28,7 @@ TestRunShow: ExecuteShow
 		--Output PlotComparison.pdf
 
 RunAll: Execute ExecuteCombine ExecuteShow
-	rf -f MollyInput
+	rm -f MollyInput
 	ln -sf /data/submit/mitay/photons// MollyInput
 	mkdir -p Output
 	bash RunAll.sh
