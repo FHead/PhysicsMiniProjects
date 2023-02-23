@@ -7,6 +7,7 @@ using namespace std;
 #include "TCanvas.h"
 #include "TKey.h"
 #include "TList.h"
+#include "TLatex.h"
 #include "TLegend.h"
 
 #include "SetStyle.h"
@@ -35,6 +36,13 @@ int main(int argc, char *argv[])
 
    PdfFileHelper PdfFile(Output);
    PdfFile.AddTextPage("MC Comparisons");
+
+   TLatex Latex;
+   Latex.SetNDC();
+   Latex.SetTextFont(42);
+   Latex.SetTextSize(0.035);
+   Latex.SetTextColor(kGray);
+   Latex.SetTextAlign(12);
 
    TList *List = Files[0]->GetListOfKeys();
    TIter Next(List);
@@ -71,6 +79,7 @@ int main(int argc, char *argv[])
             H->DrawNormalized("same");
       }
       Legend.Draw();
+      Latex.DrawLatex(0.02, 0.05, HistogramName.c_str());
       PdfFile.AddCanvas(Canvas);
 
       Canvas.SetLogy();
@@ -83,6 +92,7 @@ int main(int argc, char *argv[])
             H->DrawNormalized("same");
       }
       Legend.Draw();
+      Latex.DrawLatex(0.02, 0.05, HistogramName.c_str());
       PdfFile.AddCanvas(Canvas);
    }
 
