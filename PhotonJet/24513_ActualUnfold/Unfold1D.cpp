@@ -19,6 +19,7 @@ using namespace std;
 #include "RooUnfoldSvd.h"
 // #include "TUnfold.h"
 #include "TUnfoldDensity.h"
+// #include "TSVDUnfold.h"
 
 #include "RootUtilities.h"
 #include "CommandLine.h"
@@ -180,7 +181,7 @@ public:
 
 int main(int argc, char *argv[])
 {
-   SilenceRoot();
+   // SilenceRoot();
 
    CommandLine CL(argc, argv);
 
@@ -194,6 +195,7 @@ int main(int argc, char *argv[])
    bool DoBayes            = CL.GetBool("DoBayes",         true);
    bool DoRepeatedBayes    = CL.GetBool("DoRepeatedBayes", true);
    bool DoSVD              = CL.GetBool("DoSVD",           true);
+   bool DoTSVD             = CL.GetBool("DoTSVD",          true);
    bool DoInvert           = CL.GetBool("DoInvert",        true);
    bool DoTUnfold          = CL.GetBool("DoTUnfold",       true);
    bool DoFit              = CL.GetBool("DoFit",           true);
@@ -323,6 +325,8 @@ int main(int argc, char *argv[])
          delete HCurrentPrior;
          HCurrentPrior = ConstructPriorCopy((TH1D *)HUnfolded[HUnfolded.size()-1]);
       }
+   
+      ReweightResponse(HResponse, HPrior);
    }
 
    if(DoInvert == true)
@@ -351,6 +355,24 @@ int main(int argc, char *argv[])
          Covariance.insert(pair<string, TMatrixD>(Form("MUnfoldedSVD%.1f", D), SVDUnfold.Ereco()));
          TH1D *HFold = ForwardFold(HUnfolded[HUnfolded.size()-1], HResponse);
          HFold->SetName(Form("HRefoldedSVD%.1f", D));
+         HRefolded.push_back(HFold);
+      }
+   }
+
+   if(DoTSVD == true)
+   {
+      // vector<double> SVDRegularization{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 80, 90, 100, 125, 150};
+      vector<double> SVDRegularization{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24, 26, 28, 30, 35, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100, 125, 150, 200, 250};
+      for(double D : SVDRegularization)
+      {
+         if(D >= HGen->GetNbinsX())
+            continue;
+
+         TSVDUnfold SVDUnfold(HInput, HReco, HGen, HResponse);
+         HUnfolded.push_back((TH1D *)(SVDUnfold.Unfold(D)->Clone(Form("HUnfoldedTSVD%.1f", D))));
+         // Covariance.insert(pair<string, TMatrixD>(Form("MUnfoldedSVD%.1f", D), SVDUnfold.Ereco()));
+         TH1D *HFold = ForwardFold(HUnfolded[HUnfolded.size()-1], HResponse);
+         HFold->SetName(Form("HRefoldedTSVD%.1f", D));
          HRefolded.push_back(HFold);
       }
    }
