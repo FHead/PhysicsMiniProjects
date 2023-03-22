@@ -11,10 +11,7 @@ Clean:
 	rm -f Plots/*pdf
 
 Execute: Unfold1D.cpp
-	g++ `root-config --cflags --glibs` Unfold1D.cpp -o Execute \
-		-lUnfold -lRooFitCore -lRooFit -lMinuit -lFoam -lRooStats \
-		-I/Users/yichen/Programs/RooUnfold/RooUnfold/build \
-		-L/Users/yichen/Programs/RooUnfold/RooUnfold/build -lRooUnfold
+	CompileRootMacro Unfold1D.cpp Execute -lRooUnfold
 
 RunTest: Execute
 	./Execute --Input Input/PPDPhi.root --Output Output/PPDPhi.root \
