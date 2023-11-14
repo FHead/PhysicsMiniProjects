@@ -1,0 +1,59 @@
+% Set border=0 if you have found  the coordinate 
+% at which you place the front image on the back image.
+\documentclass[pstricks,border=0pt]{standalone}
+\usepackage{pstricks}
+\usepackage{graphicx}
+
+
+% User defined data:
+\def\BackImage{Figure3Raw.pdf}
+\def\FrontImage{MOD.pdf}
+
+\def\ScaleBack{1}
+\def\ScaleFront{0.35}
+
+\def\Columns{10}
+\def\Rows{10}
+
+% Internal used data:
+\newsavebox\IBack
+\savebox\IBack{\includegraphics[scale=\ScaleBack,page=1]{\BackImage}}
+
+\newsavebox\IFront
+\savebox\IFront{\includegraphics[scale=\ScaleFront]{\FrontImage}}
+
+
+\psset
+{
+    xunit=\dimexpr\wd\IBack/\Columns\relax,
+    yunit=\dimexpr\ht\IBack/\Rows\relax,
+}
+
+
+\begin{document}
+
+% Comment out the following code
+% to locate the coordinate to overlay the front image on the back image.
+%\begin{pspicture}(\Columns,\Rows)
+%   \rput[bl](0,0){\usebox\IBack}
+%   \psgrid
+%\end{pspicture}
+
+
+\newcount\x
+\IfFileExists{\BackImage}{%
+    \loop
+            \ifnum\x<\XeTeXpdfpagecount"\BackImage"\relax
+            \advance\x by 1\relax
+            \savebox\IBack{\includegraphics[page=\the\x,scale=\ScaleBack]{\BackImage}}%
+            \begin{pspicture}(\Columns,\Rows)
+                        \rput[bl](0,0){\usebox\IBack}
+                        \rput(0.85\wd\IBack,0.89\ht\IBack){\usebox\IFront}
+            \end{pspicture}         
+    \repeat
+}{%
+    \noindent\hfill NOTHING! \hfill\null
+}%
+
+\end{document}
+
