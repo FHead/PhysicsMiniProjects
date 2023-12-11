@@ -18,6 +18,7 @@ using namespace std;
 #define AxisSpacing 505
 #define TypeMC 0
 #define TypeData 1
+#define TypeMC2 2
 
 int main(int argc, char *argv[]);
 void SetPad(TPad &P);
@@ -28,7 +29,8 @@ TGraphAsymmErrors Transcribe(int type, int nmin, int color);
 int main(int argc, char *argv[])
 {
    vector<int> PrimaryColors = GetPrimaryColors();
-   int Colors[2] = {PrimaryColors[0], PrimaryColors[1]};
+   // int Colors[3] = {PrimaryColors[0], PrimaryColors[1], PrimaryColors[5]};   // 5 = purple
+   int Colors[3] = {PrimaryColors[0], PrimaryColors[1], PrimaryColors[2]};
 
    // Setup canvas
    double PanelW = 500, PanelH = 500;
@@ -36,7 +38,7 @@ int main(int argc, char *argv[])
    double PanelSpacing = 75;
 
    double XMin = 0, XMax = M_PI;
-   double YMin1 = 0.75, YMax1 = 1.2;
+   double YMin1 = 0.65, YMax1 = 1.31;
    double YMin2 = 3.1, YMax2 = 4.25;
 
    double CanvasW = MarginL + PanelW + PanelSpacing + PanelW + MarginR;
@@ -115,8 +117,10 @@ int main(int argc, char *argv[])
    // Setup lines and curves
    TGraphAsymmErrors GN0Data  = Transcribe(TypeData, 0, Colors[0]);
    TGraphAsymmErrors GN0MC    = Transcribe(TypeMC, 0, Colors[1]);
+   TGraphAsymmErrors GN0MC2   = Transcribe(TypeMC2, 0, Colors[2]);
    TGraphAsymmErrors GN50Data = Transcribe(TypeData, 50, Colors[0]);
    TGraphAsymmErrors GN50MC   = Transcribe(TypeMC, 50, Colors[1]);
+   TGraphAsymmErrors GN50MC2  = Transcribe(TypeMC2, 50, Colors[2]);
 
    // Draw left pad
    Pad1.cd();
@@ -124,16 +128,19 @@ int main(int argc, char *argv[])
    SetWorld(HWorld1);
 
    GN0MC.Draw("e2");
+   GN0MC2.Draw("e2");
    GN0Data.Draw("p");
 
-   // TLegend Legend1(0.675, 0.25, 1.175, 0.05);
-   TLegend Legend1(0.075, 0.4, 0.575, 0.6);
+   // TLegend Legend1(0.675, 0.25, 1.175, 0.05);   // not sure what this is
+   // TLegend Legend1(0.075, 0.4, 0.575, 0.6);   // This is original 2 entry sizing
+   TLegend Legend1(0.075, 0.4, 0.575, 0.7);   // 3 entries
    Legend1.SetTextFont(42);
    Legend1.SetTextSize(BaseTextSize / PanelH);
    Legend1.SetFillStyle(0);
    Legend1.SetBorderSize(0);
    Legend1.AddEntry(&GN0Data, "Data", "lp");
-   Legend1.AddEntry(&GN0MC, "MC", "f");
+   Legend1.AddEntry(&GN0MC, "Archived MC", "f");
+   Legend1.AddEntry(&GN0MC2, "PYTHIA 8", "f");
    Legend1.Draw();
 
    HWorld1.Draw("axis same");
@@ -144,6 +151,7 @@ int main(int argc, char *argv[])
    SetWorld(HWorld2);
 
    GN50MC.Draw("e2");
+   GN50MC2.Draw("e2");
    GN50Data.Draw("p");
 
    HWorld2.Draw("axis same");
@@ -238,19 +246,43 @@ TGraphAsymmErrors Transcribe(int type, int nmin, int color)
       if(NMin != nmin)
          continue;
 
+      if(type == TypeMC2 && nmin == 0)
+      {
+         EYL = max(EYL, 0.0025);
+         EYH = max(EYH, 0.0025);
+      }
+      
       int N = G.GetN();
       G.SetPoint(N, X, Y);
       G.SetPointError(N, EXL, EXH, EYL, EYH);
+
+      // if(type == TypeMC2 && nmin == 0)
+      // {
+      //    G.SetPoint(N, X, Y * 1.18);
+      //    G.SetPointError(N, EXL, EXH, EYL * 1.18, EYH * 1.18);
+      // }
    }
 
    File.Close();
 
    G.SetLineWidth(2);
-   G.SetLineColor(color);
-   G.SetMarkerStyle(20);
+   
+   if(type != TypeMC)
+      G.SetLineColor(color);
+   else
+      G.SetLineColorAlpha(color, 0.5);
+   
+   if(type == TypeData)
+      G.SetMarkerStyle(20);
+   else
+      G.SetMarkerStyle(5);
    G.SetMarkerSize(1.75);
    G.SetMarkerColor(color);
-   G.SetFillColorAlpha(color, 1.0);
+
+   if(type != TypeMC)
+      G.SetFillColorAlpha(color, 1.0);
+   else
+      G.SetFillColorAlpha(color, 0.75);
 
    return G;
 }

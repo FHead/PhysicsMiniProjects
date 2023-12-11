@@ -31,7 +31,7 @@ TArrow MakeArrow(TGraphAsymmErrors &G, double XMax);
 int main(int argc, char *argv[])
 {
    vector<int> PrimaryColors = GetPrimaryColors();
-   int Colors[4] = {PrimaryColors[0],  PrimaryColors[1], PrimaryColors[3], PrimaryColors[2]};
+   int Colors[4] = {TColor::GetColorDark(PrimaryColors[0]),  PrimaryColors[1], PrimaryColors[3], PrimaryColors[2]};
 
    // Setup canvas
    double PanelW = 500, PanelH = 500;
@@ -126,9 +126,9 @@ int main(int argc, char *argv[])
    Legend1.SetTextSize(BaseTextSize / PanelH);
    Legend1.SetFillStyle(0);
    Legend1.SetBorderSize(0);
-   Legend1.AddEntry(&GCMS13Sys, "CMS pp 13 TeV, v_{2}^{sub}{2}", "lpf");
-   Legend1.AddEntry(&GCMS7Sys, "CMS pp 7 TeV, v_{2}^{sub}{2}", "lpf");
-   Legend1.AddEntry(&GCMS5Sys, "CMS pp 5 TeV, v_{2}^{sub}{2}", "lpf");
+   Legend1.AddEntry(&GCMS13Sys, "CMS pp 13 TeV, v_{2}^{sub}{2}", "lp");
+   Legend1.AddEntry(&GCMS7Sys, "CMS pp 7 TeV, v_{2}^{sub}{2}", "lp");
+   Legend1.AddEntry(&GCMS5Sys, "CMS pp 5 TeV, v_{2}^{sub}{2}", "lp");
    Legend1.Draw();
 
    TLegend Legend2(0.6, 0.36, 0.9, 0.275);
