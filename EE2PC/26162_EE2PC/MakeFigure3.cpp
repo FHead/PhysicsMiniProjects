@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
    Latex.SetTextSize(BaseTextSize);
    Latex.SetTextAlign(22);
    Latex.SetTextAngle(90);
-   Latex.DrawLatex(MarginL * 0.25, MarginB + PanelH * 0.5, "Associated yield");
+   Latex.DrawLatex(MarginL * 0.25, MarginB + PanelH * 0.5, "Associated yield per unit #Delta#eta");
 
    Latex.SetTextFont(42);
    Latex.SetTextSize(BaseTextSize);
