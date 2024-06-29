@@ -91,11 +91,11 @@ int main(int argc, char *argv[])
    // Setup lines and curves
    TGraphAsymmErrors GBELLELimit = Transcribe(0, 0, Colors[0], Alphas[0]);
    TGraphAsymmErrors GLEP1Limit  = Transcribe(0, 1, Colors[1], Alphas[1]);
-   TGraphAsymmErrors GALICELimit = Transcribe(0, 2, Colors[2], Alphas[2]);
+   TGraphAsymmErrors GALICELimit = Transcribe(0, 4, Colors[2], Alphas[2]);   // #2 is prelim
    TGraphAsymmErrors GLEP2Limit  = Transcribe(0, 3, Colors[3], Alphas[3]);
    TGraphAsymmErrors GBELLEPoint = Transcribe(1, 0, Colors[0], Alphas[0]);
    TGraphAsymmErrors GLEP1Point  = Transcribe(1, 1, Colors[1], Alphas[1]);
-   TGraphAsymmErrors GALICEPoint = Transcribe(1, 2, Colors[2], Alphas[2]);
+   TGraphAsymmErrors GALICEPoint = Transcribe(1, 4, Colors[2], Alphas[2]);
    TGraphAsymmErrors GLEP2Point  = Transcribe(1, 3, Colors[3], Alphas[3]);
 
    // GLEP2Limit.SetLineWidth(4);
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
    Latex.SetTextColorAlpha(Colors[0], Alphas[0]);
    Latex.DrawLatex(7.0487, 1e-7 * Offset, ">5#sigma");
    Latex.SetTextColorAlpha(Colors[1], Alphas[1]);
-   Latex.DrawLatex(15.8, 1e-5 * Offset, "96%");
+   Latex.DrawLatex(12.8, 1e-5 * Offset * 0.2, "96%");
    Latex.SetTextColorAlpha(Colors[3], Alphas[3]);
    Latex.DrawLatex(15.6814, 1e-7 * Offset, ">99%");
    Latex.DrawLatex(23.5278, 1e-7 * Offset, "98.4%");
@@ -240,11 +240,10 @@ TGraphAsymmErrors Transcribe(int type, int data, int color, double alpha)
    TFile File("Fig3.root");
    TTree *Tree = (TTree *)File.Get("Tree");
 
-	// branches x:exl:exh:y:eyl:eyh:syl:syh:energy
-
-   double X, Y, EY, Type, Data;
+   double X, Y, EX, EY, Type, Data;
    Tree->SetBranchAddress("x",      &X);
    Tree->SetBranchAddress("y",      &Y);
+   Tree->SetBranchAddress("ex",     &EX);
    Tree->SetBranchAddress("ey",     &EY);
    Tree->SetBranchAddress("type",   &Type);
    Tree->SetBranchAddress("data",   &Data);
@@ -261,9 +260,9 @@ TGraphAsymmErrors Transcribe(int type, int data, int color, double alpha)
       int N = G.GetN();
       G.SetPoint(N, X, Y);
       if(type == 0)
-         G.SetPointError(N, 0, 0, Y * 0.01, Y * 0.01);
+         G.SetPointError(N, EX, EX, Y * 0.01, Y * 0.01);
       if(type == 1)
-         G.SetPointError(N, 0, 0, EY, EY);
+         G.SetPointError(N, EX, EX, EY, EY);
    }
 
    File.Close();

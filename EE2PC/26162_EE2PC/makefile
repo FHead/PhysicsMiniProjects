@@ -13,7 +13,7 @@ RunFigure3: MakeFigure3.cpp
 	CompileRootMacro MakeFigure3.cpp RunFigure3
 
 Figure3: RunFigure3
-	cat Fig3.txt | TextToTree Fig3.root 5 "x:y:ey:type:data"
+	cat Fig3.txt | TextToTree Fig3.root 6 "x:y:ex:ey:type:data"
 	./RunFigure3
 	xelatex Figure3.tex
 
